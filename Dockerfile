@@ -8,4 +8,4 @@ COPY . /app
 
 RUN pip install -r requirements.txt
 
-CMD ["python", "crud.py"]
+CMD ["python", "start.py"]

@@ -1,18 +1,23 @@
-#Só uma base
 version: '3'
 
 services:
-  app:
-    build:
-      context: .
-    depends_on:
-      - db
-
-  db:
-    build:
-      context: ./db
-    ports:
-      - "3306:3306"
+  mysql:
+    container_name: mysql_db
+    restart: always
+    image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: senha_do_banco #Mesma senha utilizada no crud.py
-      MYSQL_DATABASE: dietas_db #Mesmo nome de banco de dados utilizado em crud.py
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - my-db:/var/lib/mysql
+# Names our volume
+volumes:
+  my-db:
+
+  

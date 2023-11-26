@@ -1,16 +1,33 @@
 import mysql.connector
+import dotenv
+import os
+import crud
 
-# Configurações do banco de dados para conseguir se conectar
+dotenv.load_dotenv() #Carrega as variáveis de ambiente do arquivo .env
+
 connection = {
-    'host': 'db',  # Nome do serviço do banco de dados no Docker Compose
-    'user': 'root', #Usuário
-    'password': 'senha_do_banco', #Senha
-    'database': 'dietas_db' #Nome do banco de dados que deseja se conectar
+    'host': os.getenv('HOST_DB', 'localhost1'),  # Nome do serviço do banco de dados no Docker Compose
+    'user': os.getenv('USER_DB', 'root1'), #Usuário
+    'password': os.getenv('PASSWORD_DB', 'password1'), #Senha
+    'database': os.getenv('DATABASE_DB', 'dietas_bd1') #Nome do banco de dados que deseja se conectar
 }
 
+print("Valores connection", connection)
+
+start = False
+
 # Conectar ao banco de dados
-conexao = mysql.connector.connect(**db_config) #Estabele a conexão do banco de dados baseado nas informações do dicionário criado acima
+conexao = mysql.connector.connect(**connection) #Estabele a conexão do banco de dados baseado nas informações do dicionário criado acima
 cursor = conexao.cursor() #Cria cursor
+
+if start:
+    with open('db/bd.sql', 'r') as file:
+        with conexao.cursor() as cursor:
+            cursor.execute(file.read(), multi=True)
+        conexao.commit()
+    print("Banco de dados criado com sucesso!")
+    cursor.close()
+
 
 # Menu CRUD
 while True:
