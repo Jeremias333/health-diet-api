@@ -12,7 +12,7 @@ CREATE TABLE alimentos (
 CREATE TABLE dietas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     usuario_id INT,
-    nome_cliente VARCHAR(100),
+    nome VARCHAR(100),
     data_inicio DATE,
     data_fim DATE,
     FOREIGN KEY (usuario_id) REFERENCES usuario(id)
@@ -21,23 +21,26 @@ CREATE TABLE dieta_alimento (
     id INT AUTO_INCREMENT PRIMARY KEY,
     dieta_id INT,
     alimento_id INT,
-    quantidade VARCHAR(20),
+    quantidade VARCHAR(50),
     FOREIGN KEY (dieta_id) REFERENCES dietas(id),
     FOREIGN KEY (alimento_id) REFERENCES alimentos(id)
 );
+
 -- Inserções de exemplo
 INSERT INTO usuario (nome, idade, sexo)
-VALUES('Maria', 30, 'Feminino')
+VALUES('Maria', 30, 'F', '12345');
 INSERT INTO alimentos (nome)
-VALUES ('Maçã'),
-    ('Frango'),
-    ('Brócolis'),
-    ('Quinoa'),
-    ('Abacate'),
-    ('Salmão');
+VALUES (
+        ('Maçã'),
+        ('Frango'),
+        ('Brócolis'),
+        ('Quinoa'),
+        ('Abacate'),
+        ('Salmão')
+    );
 INSERT INTO dietas (usuario_id, data_inicio, data_fim)
-VALUES (1, 'Cliente 1', '2023-11-01', '2023-12-01');
-INSERT INTO dieta_alimento (dieta_id, alimento_id, quantidade)
-VALUES (1, 1, '2 unidades'),
-    (1, 2, '150g'),
-    (1, 3, '100g');
+VALUES (1, 'Dieta 1', '2023-11-01', '2023-12-01');
+-- INSERT INTO dieta_alimento (dieta_id, alimento_id, quantidade)
+-- VALUES (1, 1, '2 unidades'),
+--     (1, 2, '150g'),
+--     (1, 3, '100g');
