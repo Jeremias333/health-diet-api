@@ -39,8 +39,8 @@ VALUES (
         ('Salmão')
     );
 INSERT INTO dietas (usuario_id, data_inicio, data_fim)
-VALUES (1, 'Dieta 1', '2023-11-01', '2023-12-01');
--- INSERT INTO dieta_alimento (dieta_id, alimento_id, quantidade)
--- VALUES (1, 1, '2 unidades'),
---     (1, 2, '150g'),
---     (1, 3, '100g');
+VALUES (1, 'Dieta da Lua', '2023-11-01', '2023-12-01');
+INSERT INTO dieta_alimento (dieta_id, alimento_id, quantidade)
+VALUES (1, 1, '2 unidades'),
+    (1, 2, '150g'),
+    (1, 3, '100g');
