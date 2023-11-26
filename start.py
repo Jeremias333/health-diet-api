@@ -3,13 +3,15 @@ import dotenv
 import os
 import crud
 
-dotenv.load_dotenv() #Carrega as variáveis de ambiente do arquivo .env
+dotenv.load_dotenv()  # Carrega as variáveis de ambiente do arquivo .env
 
 connection = {
-    'host': os.getenv('HOST_DB', 'localhost1'),  # Nome do serviço do banco de dados no Docker Compose
-    'user': os.getenv('USER_DB', 'root1'), #Usuário
-    'password': os.getenv('PASSWORD_DB', 'password1'), #Senha
-    'database': os.getenv('DATABASE_DB', 'dietas_bd1') #Nome do banco de dados que deseja se conectar
+    # Nome do serviço do banco de dados no Docker Compose
+    'host': os.getenv('HOST_DB', 'localhost1'),
+    'user': os.getenv('USER_DB', 'root1'),  # Usuário
+    'password': os.getenv('PASSWORD_DB', 'password1'),  # Senha
+    # Nome do banco de dados que deseja se conectar
+    'database': os.getenv('DATABASE_DB', 'dietas_bd1')
 }
 
 print("Valores connection", connection)
@@ -23,8 +25,9 @@ user_logged = {
 }
 
 # Conectar ao banco de dados
-conexao = mysql.connector.connect(**connection) #Estabele a conexão do banco de dados baseado nas informações do dicionário criado acima
-cursor = conexao.cursor() #Cria cursor
+# Estabele a conexão do banco de dados baseado nas informações do dicionário criado acima
+conexao = mysql.connector.connect(**connection)
+cursor = conexao.cursor()  # Cria cursor
 
 if start:
     with open('db/bd.sql', 'r') as file:
@@ -43,7 +46,7 @@ while True:
 
     opcao = int(input("Escolha a opção: "))
 
-    if opcao == 1: #LOGIN
+    if opcao == 1:  # LOGIN
         print("---LOGIN---")
         username = input("Username: ")
         password = input("password: ")
@@ -59,14 +62,14 @@ while True:
 
             # Menu autenticação
             while True:
+                print("\nBem vindo, {}!".format(user_logged['nome']))
                 print("\nMenu:")
                 print("1. Dieta")
                 print("2. Alimento")
-                
 
                 escolha = int(input("Escolha a opção: "))
 
-                if escolha == 1: #Dieta
+                if escolha == 1:  # Dieta
 
                     print("Escolha a opção: ")
                     print("1. Inserir dieta")
@@ -80,69 +83,81 @@ while True:
 
                     while True:
 
-                        if opcao == 1: #Inserir
+                        if opcao == 1:  # Inserir
                             print("---Inserir dieta---")
                             name = input("Name: ")
                             date_init = input("Date init: ")
                             date_final = input("Date final: ")
 
-                            crud.create_diet(conexao, name, date_init, date_final)
+                            crud.create_diet(
+                                conexao, name, date_init, date_final)
 
-                        elif opcao == 2: #Pesquisar
+                        elif opcao == 2:  # Pesquisar
                             print("---Pesquisar dieta---")
                             name = input("Nome para buscar dieta: ")
-                            
+
                             diet = crud.find_diet(conexao, name)
-                            
+
                             if len(diet) > 0:
-                                print('Dieta encontrada: {}'.format(diet[0][1]))
-                            
+                                print(
+                                    'Dieta encontrada: {}'.format(diet[0][2]))
+
                                 print("1. Ver detalhes da dieta")
-                                print("2. Sair") 
+                                print("2. Sair")
                                 opcao = int(input("Escolha a opção: "))
-                                
+
                                 if opcao == 1:
                                     print("Nome: ", diet[0][1])
                                     print("Data inicio: ", diet[0][2])
                                     print("Data fim: ", diet[0][3])
-                                    
-                                    all_food_diet = crud.find_food_diet(conexao, diet[0][0])
-                                    for index, food in all_food_diet:
-                                        print('{}. {}'.format(index, food))
+
+                                    all_food_diet = crud.find_food_diet(
+                                        conexao, diet[0][0])
+                                    print("Alimentos: ")
+                                    for index, diet_id, food_id, quantity in all_food_diet:
+                                        food = crud.find_food_id(
+                                            conexao, food_id)[0][1]
+                                        print('{}. {} - {}'.format(
+                                            food_id, food, quantity))
                                     input('Pressione enter para continuar')
+                                    break
+                                if opcao == 2:
+                                    break
                             else:
                                 print('Dieta não encontrada, busque outra')
-                        
-                        elif opcao == 3: #Exibir
+
+                        elif opcao == 3:  # Exibir
                             print("---Exibir dieta---")
 
                             diets = crud.all_diets(conexao)
-                            for index, diet in diets:
-                                print('{}. {}'.format(index, diet))
+                            for index, _, name, date_init, date_final, in diets:
+                                print('{}. {} ({} - {})'.format(index,
+                                      name, date_init, date_final))
                             input('Pressione enter para continuar')
                             break
-                        
-                        elif opcao == 4: #Atualizar
+
+                        elif opcao == 4:  # Atualizar
                             print("---Atualizar dieta---")
                             name = input("Name: ")
                             date_init = input("Date init: ")
                             date_final = input("Date final: ")
 
-                            crud.update_diet(conexao, name, date_init, date_final)
-            
-                        elif opcao == 5: #Excluir
+                            crud.update_diet(
+                                conexao, name, date_init, date_final)
+
+                        elif opcao == 5:  # Excluir
                             print("---Excluir dieta")
                             name = input("Name: ")
 
                             crud.remove_diet(conexao, name)
 
-                        elif opcao == 7: #Sair
-                            print("SAINDO...") 
-                        
+                        elif opcao == 7:  # Sair
+                            print("SAINDO...")
+
                         else:
                             print("Opção inválida, tente novamente...")
 
-                if escolha == 2:  #Alimento
+                if escolha == 2:  # Alimento
 
                     print("Escolha a opção: ")
                     print("1. Inserir alimento")
@@ -155,17 +170,18 @@ while True:
 
                     while True:
 
-                        if opcao == 1: #Inserir
+                        if opcao == 1:  # Inserir
                             print("---Inserir alimento---")
                             name = input(("Name: "))
 
                             crud.create_food(conexao, name)
-                            
-                            create_new = input("Deseja cadastrar outro alimento? (S/N): ")
+
+                            create_new = input(
+                                "Deseja cadastrar outro alimento? (S/N): ")
                             if create_new == 'N':
                                 break
 
-                        elif opcao == 2: #Exibir
+                        elif opcao == 2:  # Exibir
                             print("---Exibir alimento---")
 
                             all_foods = crud.all_foods(conexao)
@@ -173,7 +189,7 @@ while True:
                                 print('{}. {}'.format(index, food))
                             input('Pressione enter para continuar')
                             break
-                        elif opcao == 3: #Excluir
+                        elif opcao == 3:  # Excluir
                             print("---Excluir alimento---")
                             all_foods = crud.all_foods(conexao)
                             for index, food in all_foods:
@@ -182,35 +198,34 @@ while True:
 
                             crud.remove_food(conexao, name)
 
-                        elif opcao == 4: #Pesquisar
+                        elif opcao == 4:  # Pesquisar
                             print("---Pesquisar alimento---")
                             name = input("Nome do alimento a ser pesquisado: ")
 
                             foods = crud.find_food(conexao, name)
                             if len(foods) > 0:
-                                print('Alimento encontrado: {}'.format(foods[0][1]))
+                                print('Alimento encontrado: {}'.format(
+                                    foods[0][1]))
                                 break
                             print('Alimento não encontrado, busque outro')
 
-
-                        elif opcao == 5: #Sair
+                        elif opcao == 5:  # Sair
                             print("SAINDO...")
 
-                        else: 
+                        else:
                             print("Opção inválida, tente novamente...")
 
-
-    elif opcao == 2: #CADASTRAR
+    elif opcao == 2:  # CADASTRAR
 
         print("---CADASTRO---")
-        username = input("Username: ")
-        age = int(input("Age: "))
-        gender = input("Gender: ")
-        password = input("Password")
-        repassword = input("Repassword: ")
+        username = input("Nome de Usuario: ")
+        age = int(input("Idade: "))
+        gender = input("Sexo: ")
+        password = input("Senha: ")
+        repassword = input("Repetir Senha: ")
 
         crud.signup(conexao, username, age, gender, password, repassword)
-                
+
     elif opcao == 3:
         print("SAINDO...")
         exit()
@@ -219,8 +234,6 @@ while True:
         print("Opção inválida, tente novamente")
 
 
-
-
 # Fechar conexão
-cursor.close() #Fecha o cursor
-conexao.close() #Fecha conexão com o banco de 
+cursor.close()  # Fecha o cursor
+conexao.close()  # Fecha conexão com o banco de

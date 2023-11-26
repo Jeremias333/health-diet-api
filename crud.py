@@ -33,7 +33,6 @@ def signup(conn, username, age, gender, password, repassword):
         return False
 
     if password == repassword:
-        print("Usuário cadastrado com sucesso!")
         create_user(conn, username, age, gender, password)
         return True
     else:
@@ -68,6 +67,15 @@ def find_food(conn, name):
     cursor = conn.cursor()
     sql = "SELECT * FROM alimentos WHERE BINARY nome = %s"
     val = (name, )
+    cursor.execute(sql, val)
+    result = cursor.fetchall()
+    cursor.close()
+    return result
+
+def find_food_id(conn, id):
+    cursor = conn.cursor()
+    sql = "SELECT * FROM alimentos WHERE id = %s"
+    val = (id, )
     cursor.execute(sql, val)
     result = cursor.fetchall()
     cursor.close()
