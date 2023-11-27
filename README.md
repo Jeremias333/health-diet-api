@@ -11,7 +11,7 @@ APP feito para gerir a parte lógica do sistema de dietas saudáveis utilizando 
     USER_DB=????
     PASSWORD_DB=????
     DATABASE_DB=????
-```
+``````
 2. Execute o comando `docker compose down` na pasta raiz do projeto
 3. Execute o comando `docker compose up -d` na pasta raiz do projeto
 4. Execute o comando `docker compose exec python bash` na pasta raiz do projeto
