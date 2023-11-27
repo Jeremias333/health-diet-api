@@ -1,2 +1,12 @@
-# health-diet-api
-API feito para gerir a parte lógica do sistema de dietas saudáveis.
+# health-diet
+APP feito para gerir a parte lógica do sistema de dietas saudáveis utilizando Docker e Docker Compose para entrega da aplicação.
+
+## Instalação
+*Necessário possuir Docker e Docker Composer instalados.*
+
+1. Clone o repositório
+2. Execute o comando `docker compose down` na pasta raiz do projeto
+3. Execute o comando `docker compose up -d` na pasta raiz do projeto
+4. Execute o comando `docker compose exec python bash` na pasta raiz do projeto
+5. Execute o comando `python start.py` 
+

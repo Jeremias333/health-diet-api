@@ -8,7 +8,7 @@ dotenv.load_dotenv()  # Carrega as variáveis de ambiente do arquivo .env
 connection = {
     # Nome do serviço do banco de dados no Docker Compose
     'host': os.getenv('HOST_DB', 'localhost'),
-    'user': os.getenv('USER_DB', 'root'),  # Usuário
+    'user': os.getenv('USER_DB', 'user'),  # Usuário
     'password': os.getenv('PASSWORD_DB', 'password'),  # Senha
     # Nome do banco de dados que deseja se conectar
     'database': os.getenv('DATABASE_DB', 'db')

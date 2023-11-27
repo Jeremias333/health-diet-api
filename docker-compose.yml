@@ -6,13 +6,17 @@ networks:
 
 services:
   python: 
-    build: ./app.Dockerfile
-    container_name: python_app
+    build: .
+    container_name: health_diet_app
+    stdin_open: true
+    tty: true
+    command: ["tail", "-f", "/dev/null"]  # Mantém o contêiner em execução de forma interativa
+
 
   mysql:
     container_name: mysql_db
     restart: always
-    build: ./db.Dockerfile
+    build: 'db/.'
     environment:
       MYSQL_DATABASE: 'db'
       MYSQL_USER: 'user'
