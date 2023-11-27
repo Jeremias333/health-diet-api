@@ -56,6 +56,7 @@ try:
 
             if allowed:
                 temp_user = crud.find_user(conexao, username)
+                print(temp_user)
                 user_logged['id'] = temp_user[0][0]
                 user_logged['nome'] = temp_user[0][1]
                 user_logged['idade'] = temp_user[0][2]
@@ -87,12 +88,11 @@ try:
 
                             if opcao == 1:  # Inserir
                                 print("---Inserir dieta---")
-                                name = input("Name: ")
-                                date_init = input("Date init: ")
-                                date_final = input("Date final: ")
+                                name = input("Nome: ")
+                                date_init = input("Data inicio: ")
+                                date_final = input("Data fim: ")
 
-                                crud.create_diet(
-                                    conexao, name, date_init, date_final)
+                                crud.create_diet(conexao, user_logged['id'], name, date_init, date_final)
                                 
                                 create_new = input(
                                     "Deseja inserir outra dieta? (S/N): ").lower()
@@ -116,12 +116,12 @@ try:
                                     opcao = int(input("Escolha a opção: "))
 
                                     if opcao == 1:
-                                        print("Nome: ", diet[0][1])
-                                        print("Data inicio: ", diet[0][2])
-                                        print("Data fim: ", diet[0][3])
+                                        print("Nome: ", diet[0][2])
+                                        print("Data inicio: ", diet[0][3])
+                                        print("Data fim: ", diet[0][4])
 
                                         all_food_diet = crud.find_food_diet(
-                                            conexao, diet[0][0])
+                                            conexao, diet[0][1])
                                         print("Alimentos: ")
                                         for index, diet_id, food_id, quantity in all_food_diet:
                                             food = crud.find_food_id(
@@ -139,9 +139,6 @@ try:
                                 print("---Exibir dietas---")
 
                                 diets = crud.all_diets(conexao, user_logged['id'])
-                                if len(diets) == 0:
-                                    print("Nenhuma dieta cadastrada")
-                                    break
                                 for index, _, name, date_init, date_final, in diets:
                                     print('{}. {} ({} - {})'.format(index,
                                                                     name, date_init, date_final))
@@ -149,13 +146,75 @@ try:
                                 break
 
                             elif opcao == 4:  # Atualizar
-                                print("---Atualizar dieta---")
-                                name = input("Name: ")
-                                date_init = input("Date init: ")
-                                date_final = input("Date final: ")
+                                print("---Dietas Existentes---")
+                                print("DIGITE SAIR para voltar ao menu anterior")
+                                diet = []
+                                diets = crud.all_diets(conexao, user_logged['id'])
+                                for index, _, name, date_init, date_final, in diets:
+                                    print('{}. {} ({} - {})'.format(index,
+                                                                    name, date_init, date_final))
+                                while True:
+                                    choice_diet = input("Escolha a dieta pelo nome: ")
+                                    if choice_diet == 'SAIR':
+                                        break
+                                    diet = [list(crud.find_diet(conexao, choice_diet)[0])]
+                                    print("Dieta: ", diet, type(diet))
+                                    if len(diet) > 0:
+                                        while True:
+                                            print("---Atualizar dieta---")
+                                            print("Nome: ", diet[0][2])
+                                            print("Data inicio: ", diet[0][3])
+                                            print("Data fim: ", diet[0][4])
+                                            print("1. Atualizar nome")
+                                            print("2. Atualizar data inicio")
+                                            print("3. Atualizar data final")
+                                            print("4. Adicionar comida")
+                                            print("5. Remover comida")
+                                            print("6. Sair")
+                                            
+                                            option = int(input("Escolha a opção: "))
+                                            
+                                            if option == 1:
+                                                new_name = input("Novo nome: ")
+                                                crud.update_diet_name(conexao, diet[0][2], new_name)
+                                                diet[0][2] = new_name
+                                                continue
+                                            elif option == 2:
+                                                new_date_init = input("Nova data inicio: ")
+                                                crud.update_diet_date_init(conexao, diet[0][2], new_date_init)
+                                                diet[0][3] = new_date_init
+                                                continue
+                                            elif option == 3:
+                                                new_date_final = input("Nova data final: ")
+                                                crud.update_diet_date_final(conexao, diet[0][2], new_date_final)
+                                                diet[0][4] = new_date_final
+                                                continue
+                                            elif option == 4:
+                                                all_foods = crud.all_foods(conexao)
+                                                for index, food in all_foods:
+                                                    print('{}. {}'.format(index, food))
+                                                food_id = int(input("ID do alimento: "))
+                                                quantity = input("Quantidade: ")
+                                                crud.add_food_diet(conexao, food_id, diet[0][1], quantity)
+                                                continue
+                                            elif option == 5:
+                                                all_food_diet = crud.find_food_diet(
+                                                    conexao, diet[0][1])
+                                                for index, diet_id, food_id, quantity in all_food_diet:
+                                                    food = crud.find_food_id(
+                                                        conexao, food_id)[0][1]
+                                                    print('{}. {} - {}'.format(
+                                                        food_id, food, quantity))
+                                                food_id = int(input("ID do alimento: "))
+                                                crud.remove_food_diet(conexao, food_id, diet[0][1])
+                                                continue
+                                            elif option == 6:
+                                                break
+                                    else:
+                                        print("Dieta não encontrada, tente novamente")
+                                        continue
 
-                                crud.update_diet(
-                                    conexao, name, date_init, date_final)
+                                
 
                             elif opcao == 5:  # Excluir
                                 print("---Excluir dieta")

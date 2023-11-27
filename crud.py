@@ -117,13 +117,43 @@ def all_diets(conn, id):
     cursor.close()
     return result
 
-def create_diet(conn, name, date_init, date_final):
+def create_diet(conn, id, name, date_init, date_final):
     cursor = conn.cursor()
-    sql = "INSERT INTO dietas (nome, data_inicio, data_fim) VALUES (%s, %s, %s)"
-    val = (name, date_init, date_final)
+    sql = "INSERT INTO dietas (usuario_id, nome, data_inicio, data_fim) VALUES (%s, %s, %s, %s)"
+    val = (id, name, date_init, date_final)
     cursor.execute(sql, val)
     conn.commit()
     print("Dieta: ", name, " cadastrada com sucesso!")
+    cursor.close()
+    return True
+
+def update_diet_name(conn, name, new_name):
+    cursor = conn.cursor()
+    sql = "UPDATE dietas SET nome = %s WHERE BINARY nome = %s"
+    val = (new_name, name)
+    cursor.execute(sql, val)
+    conn.commit()
+    print("Dieta: ", name, " atualizada com sucesso!")
+    cursor.close()
+    return True
+
+def update_diet_date_init(conn, name, date_init):
+    cursor = conn.cursor()
+    sql = "UPDATE dietas SET data_inicio = %s WHERE BINARY nome = %s"
+    val = (date_init, name)
+    cursor.execute(sql, val)
+    conn.commit()
+    print("Dieta: ", name, " atualizada com sucesso!")
+    cursor.close()
+    return True
+
+def update_diet_date_final(conn, name, date_final):
+    cursor = conn.cursor()
+    sql = "UPDATE dietas SET data_fim = %s WHERE BINARY nome = %s"
+    val = (date_final, name)
+    cursor.execute(sql, val)
+    conn.commit()
+    print("Dieta: ", name, " atualizada com sucesso!")
     cursor.close()
     return True
 
@@ -149,13 +179,14 @@ def update_diet(conn, name, date_init, date_final):
 
 def add_food_diet(conn, food_id, diet_id, qtd):
     cursor = conn.cursor()
-    sql = "INSERT INTO dieta_alimento (alimento_id, dieta_id, quantity) VALUES (%s, %s, %s)"
+    sql = "INSERT INTO dieta_alimento (alimento_id, dieta_id, quantidade) VALUES (%s, %s, %s)"
     val = (food_id, diet_id, qtd)
     cursor.execute(sql, val)
     conn.commit()
     print("Alimento: ", food_id, " adicionado na dieta: ", diet_id, " com sucesso!")
     cursor.close()
     return True
+
 
 def remove_food_diet(conn, food_id, diet_id):
     cursor = conn.cursor()
