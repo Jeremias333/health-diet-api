@@ -17,3 +17,10 @@ APP feito para gerir a parte lógica do sistema de dietas saudáveis utilizando 
 4. Execute o comando `docker compose exec python bash` na pasta raiz do projeto
 5. Execute o comando `python start.py` 
 
+Para executar o cenário (B)
+
+1. Execute o comando `sudo docker compose exec mysql bash` na pasta raiz do projeto
+2. Execute o comando `mysql -p`
+3. Digite a senha
+4. Execute o comando `use db;`
+5. Execute o comando `SELECT * FROM usuario;`
