@@ -1,5 +1,9 @@
 version: '3'
 
+networks:
+  vilarim:
+    driver: bridge
+
 services:
   mysql:
     container_name: mysql_db
