@@ -4,6 +4,8 @@ APP feito para gerir a parte lógica do sistema de dietas saudáveis utilizando 
 ## Instalação
 *Necessário possuir Docker e Docker Composer instalados.*
 
+Para testar o cenário A
+
 1. Clone o repositório
 1.1. Crie um arquivo .env na pasta raiz do projeto com as seguintes variáveis:
 ```
@@ -17,7 +19,7 @@ APP feito para gerir a parte lógica do sistema de dietas saudáveis utilizando 
 4. Execute o comando `docker compose exec python bash` na pasta raiz do projeto
 5. Execute o comando `python start.py` 
 
-Para executar o cenário (B)
+Para executar o cenário B
 
 1. Execute o comando `sudo docker compose exec mysql bash` na pasta raiz do projeto
 2. Execute o comando `mysql -p`
