@@ -5,10 +5,14 @@ networks:
     driver: bridge
 
 services:
+  python: 
+    build: ./app.Dockerfile
+    container_name: python_app
+
   mysql:
     container_name: mysql_db
     restart: always
-    image: mysql:latest
+    build: ./db.Dockerfile
     environment:
       MYSQL_DATABASE: 'db'
       MYSQL_USER: 'user'
