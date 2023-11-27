@@ -7,11 +7,11 @@ dotenv.load_dotenv()  # Carrega as variáveis de ambiente do arquivo .env
 
 connection = {
     # Nome do serviço do banco de dados no Docker Compose
-    'host': os.getenv('HOST_DB', 'localhost1'),
-    'user': os.getenv('USER_DB', 'root1'),  # Usuário
-    'password': os.getenv('PASSWORD_DB', 'password1'),  # Senha
+    'host': os.getenv('HOST_DB', 'localhost'),
+    'user': os.getenv('USER_DB', 'root'),  # Usuário
+    'password': os.getenv('PASSWORD_DB', 'password'),  # Senha
     # Nome do banco de dados que deseja se conectar
-    'database': os.getenv('DATABASE_DB', 'dietas_bd1')
+    'database': os.getenv('DATABASE_DB', 'db')
 }
 
 print("Valores connection", connection)
@@ -93,6 +93,13 @@ try:
 
                                 crud.create_diet(
                                     conexao, name, date_init, date_final)
+                                
+                                create_new = input(
+                                    "Deseja inserir outra dieta? (S/N): ").lower()
+                                if create_new == 's':
+                                    continue
+                                else:
+                                    break
 
                             elif opcao == 2:  # Pesquisar
                                 print("---Pesquisar dieta---")
@@ -129,12 +136,15 @@ try:
                                     print('Dieta não encontrada, busque outra')
 
                             elif opcao == 3:  # Exibir
-                                print("---Exibir dieta---")
+                                print("---Exibir dietas---")
 
-                                diets = crud.all_diets(conexao)
+                                diets = crud.all_diets(conexao, user_logged['id'])
+                                if len(diets) == 0:
+                                    print("Nenhuma dieta cadastrada")
+                                    break
                                 for index, _, name, date_init, date_final, in diets:
                                     print('{}. {} ({} - {})'.format(index,
-                                        name, date_init, date_final))
+                                                                    name, date_init, date_final))
                                 input('Pressione enter para continuar')
                                 break
 
@@ -181,8 +191,10 @@ try:
                                 crud.create_food(conexao, name)
 
                                 create_new = input(
-                                    "Deseja cadastrar outro alimento? (S/N): ")
-                                if create_new == 'N':
+                                    "Deseja cadastrar outro alimento? (S/N): ").lower()
+                                if create_new == 's':
+                                    continue
+                                else:
                                     break
 
                             elif opcao == 2:  # Exibir
@@ -198,26 +210,48 @@ try:
                                 all_foods = crud.all_foods(conexao)
                                 for index, food in all_foods:
                                     print('{}. {}'.format(index, food))
-                                name = input("Nome do alimento a ser excluído: ")
+                                name = input(
+                                    "Nome do alimento a ser excluído: ")
 
                                 crud.remove_food(conexao, name)
 
+                                remove_new = input(
+                                    "Deseja excluir outro alimento? (S/N): ").lower()
+                                if remove_new == 's':
+                                    continue
+                                else:
+                                    break
+
                             elif opcao == 4:  # Pesquisar
                                 print("---Pesquisar alimento---")
-                                name = input("Nome do alimento a ser pesquisado: ")
+                                name = input(
+                                    "Nome do alimento a ser pesquisado: ")
 
                                 foods = crud.find_food(conexao, name)
                                 if len(foods) > 0:
                                     print('Alimento encontrado: {}'.format(
                                         foods[0][1]))
-                                    break
-                                print('Alimento não encontrado, busque outro')
+                                    search_new = input(
+                                        "Deseja pesquisar outro alimento? (S/N): ").lower()
+                                    if search_new == 's':
+                                        continue
+                                    else:
+                                        break
+                                else:
+                                    print('Alimento não encontrado, busque outro')
+                                    search_new = input(
+                                        "Deseja pesquisar outro alimento? (S/N): ").lower()
+                                    if search_new == 's':
+                                        continue
+                                    else:
+                                        break
 
                             elif opcao == 5:  # Sair
-                                print("SAINDO...")
+                                break
 
                             else:
                                 print("Opção inválida, tente novamente...")
+                                continue
                     if escolha == 3:
                         print("SAINDO...")
                         break

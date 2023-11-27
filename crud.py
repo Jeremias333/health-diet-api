@@ -108,10 +108,11 @@ def find_diet(conn, name):
     cursor.close()
     return result
 
-def all_diets(conn):
+def all_diets(conn, id):
     cursor = conn.cursor()
-    sql = "SELECT * FROM dietas"
-    cursor.execute(sql)
+    sql = "SELECT * FROM dietas WHERE usuario_id = %s"
+    val = (id, )
+    cursor.execute(sql, val)
     result = cursor.fetchall()
     cursor.close()
     return result
@@ -146,13 +147,23 @@ def update_diet(conn, name, date_init, date_final):
     cursor.close()
     return True
 
-def add_food_diet(conn, food_id, diet_id):
+def add_food_diet(conn, food_id, diet_id, qtd):
     cursor = conn.cursor()
-    sql = "INSERT INTO dieta_alimento (alimento_id, dieta_id) VALUES (%s, %s)"
-    val = (food_id, diet_id)
+    sql = "INSERT INTO dieta_alimento (alimento_id, dieta_id, quantity) VALUES (%s, %s, %s)"
+    val = (food_id, diet_id, qtd)
     cursor.execute(sql, val)
     conn.commit()
     print("Alimento: ", food_id, " adicionado na dieta: ", diet_id, " com sucesso!")
+    cursor.close()
+    return True
+
+def remove_food_diet(conn, food_id, diet_id):
+    cursor = conn.cursor()
+    sql = "DELETE FROM dieta_alimento WHERE alimento_id = %s AND dieta_id = %s"
+    val = (food_id, diet_id)
+    cursor.execute(sql, val)
+    conn.commit()
+    print("Alimento: ", food_id, " removido da dieta: ", diet_id, " com sucesso!")
     cursor.close()
     return True
 
