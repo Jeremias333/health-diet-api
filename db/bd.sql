@@ -26,19 +26,18 @@ CREATE TABLE dieta_alimento (
     FOREIGN KEY (alimento_id) REFERENCES alimentos(id)
 );
 
--- Inserções de exemplo
-INSERT INTO usuario (nome, idade, sexo)
+-- Inserções de exemplo 
+INSERT INTO usuario (nome, idade, sexo, senha)
 VALUES('Maria', 30, 'F', '12345');
 INSERT INTO alimentos (nome)
-VALUES (
-        ('Maçã'),
-        ('Frango'),
-        ('Brócolis'),
-        ('Quinoa'),
-        ('Abacate'),
-        ('Salmão')
-    );
-INSERT INTO dietas (usuario_id, data_inicio, data_fim)
+VALUES 
+    ('Maçã'),
+    ('Frango'),
+    ('Brócolis'),
+    ('Quinoa'),
+    ('Abacate'),
+    ('Salmão');
+INSERT INTO dietas (usuario_id, nome, data_inicio, data_fim)
 VALUES (1, 'Dieta da Lua', '2023-11-01', '2023-12-01');
 INSERT INTO dieta_alimento (dieta_id, alimento_id, quantidade)
 VALUES (1, 1, '2 unidades'),
